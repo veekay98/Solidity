@@ -1,0 +1,61 @@
+pragma solidity ^0.4.0;
+
+contract Product_Survey{
+    struct product{
+        string name1;
+        uint voteCount;
+    }
+    struct participant{
+        bool voted;
+        uint voteIndex;
+        uint weight;
+    }
+
+    address public owner;
+    mapping(address=>participant) public participants;
+    product[] public products;
+    uint public surveyEnd;
+    
+    function Product_Survey(uint duration,string pro1,string pro2){
+        owner=msg.sender;
+        
+        surveyEnd=now+(duration*1 minutes);
+        products.push(product(pro1,0));
+        products.push(product(pro2,0));
+    }
+    
+    event Survey_Results(string name1,uint voteCount);
+    
+    function authorize(address participant){
+    require(msg.sender==owner);
+    require(!participants[participant].voted);
+    participants[participant].weight=1;
+    }
+    
+    function vote(uint voteIndex){
+        require(now<surveyEnd);
+        require(!participants[msg.sender].voted);
+        
+        participants[msg.sender].voted=true;
+        participants[msg.sender].voteIndex=voteIndex;
+        
+        products[voteIndex].voteCount+=participants[msg.sender].weight;
+    }
+    
+    
+    function end(){
+        require(msg.sender==owner);
+        require(now>surveyEnd);
+        
+        for(uint i=0;i<products.length;i++)
+        Survey_Results(products[i].name1,products[i].voteCount);
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
