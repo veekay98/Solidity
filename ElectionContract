@@ -20,8 +20,8 @@ contract Election{
         owner=msg.sender;
         name1= _name;
         electionEnd=now+(duration*1 minutes);
-        candidates.push(candidate("Trump",0));
-        candidates.push(candidate("Hillary",0));
+        candidates.push(candidate(cand1,0));
+        candidates.push(candidate(cand2,0));
     }
     
     event Election_Results(string name,uint voteCount);
