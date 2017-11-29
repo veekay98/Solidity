@@ -48,7 +48,7 @@ contract Election{
         require(now>electionEnd);
         
         for(int i=0;i<candidates.length;i++)
-        Election_Results(candidates[i].name,candidates[i].voteCount);
+        Election_Results(candidates[i].name1,candidates[i].voteCount);
         
     }
     
