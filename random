@@ -1,194 +1,127 @@
-function [theta, J_history] = gradientDescent(X, y, theta, alpha, num_iters)
-%GRADIENTDESCENT Performs gradient descent to learn theta
-%   theta = GRADIENTDESCENT(X, y, theta, alpha, num_iters) updates theta by 
-%   taking num_iters gradient steps with learning rate alpha
+function [J, grad] = costFunction(theta, X, y)
+%COSTFUNCTION Compute cost and gradient for logistic regression
+%   J = COSTFUNCTION(theta, X, y) computes the cost of using theta as the
+%   parameter for logistic regression and the gradient of the cost
+%   w.r.t. to the parameters.
 
 % Initialize some useful values
 m = length(y); % number of training examples
-J_history = zeros(num_iters, 1);
 
-for iter = 1:num_iters,
+% You need to return the following variables correctly 
+J = 0;
+grad = zeros(size(theta));
+
+% ====================== YOUR CODE HERE ======================
+% Instructions: Compute the cost of a particular choice of theta.
+%               You should set J to the cost.
+%               Compute the partial derivatives and set grad to the partial
+%               derivatives of the cost w.r.t. each parameter in theta
+%
+% Note: grad should have the same dimensions as theta
+%
+for 1=1:m, J+= -y(i)*log10([ones(m,1) X] *theta)-(1-y(i))*(1-log10(1-([ones(m,1) X] *theta))); end;
+end;
+J/=m;
+for j=1:length(theta), for k=1:m, grad(j)+=(([ones(m,1) X] *theta)-y(k))*X(k,j); end; end;
+grad/=m;
 
 
-    % ====================== YOUR CODE HERE ======================
-    % Instructions: Perform a single gradient step on the parameter vector
-    %               theta. 
-    %
-    % Hint: While debugging, it can be useful to print out the values
-    %       of the cost function (computeCost) and gradient here.
-    %
 
- temp=theta;
- temp(1ter)=temp(1ter)-alpha/m*(sum((X*theta-y).*X(:,2));
- temp(2)=temp(2)-alpha/m*(sum((X*theta-y).*X(:,2));
- theta=temp;
+
+
+
+% =============================================================
+
+end
+
+
+
+function plotData(X, y)
+%PLOTDATA Plots the data points X and y into a new figure 
+%   PLOTDATA(x,y) plots the data points with + for the positive examples
+%   and o for the negative examples. X is assumed to be a Mx2 matrix.
+
+% Create New Figure
+figure; hold on;
+
+% ====================== YOUR CODE HERE ======================
+% Instructions: Plot the positive and negative examples on a
+%               2D plot, using the option 'k+' for the positive
+%               examples and 'ko' for the negative examples.
+%
+
+x1=X(:,1);x2=X(:,2);
+XX=[];YY=[];Y=[];x=[];
+
+for i=1:length(y), if(y(i)==1), x=[x x1(i)]; Y=[Y x2(i)]; end; end;
+for i=1:length(y), if(y(i)==0), XX=[XX x1(i)]; YY=[YY x2(i)]; end; end;
+ 
+plot(x,Y,'k+','LineWidth',2,'MarkerSize',7);
+plot(XX,YY,'ko','MarkerFaceColor','y','MarkerSize',7);
+% =========================================================================
+
+
+
+hold off;
+
+end
+
+
+
+function p = predict(theta, X)
+%PREDICT Predict whether the label is 0 or 1 using learned logistic 
+%regression parameters theta
+%   p = PREDICT(theta, X) computes the predictions for X using a 
+%   threshold at 0.5 (i.e., if sigmoid(theta'*x) >= 0.5, predict 1)
+
+m = size(X, 1); % Number of training examples
+
+% You need to return the following variables correctly
+p = zeros(m, 1);
+
+% ====================== YOUR CODE HERE ======================
+% Instructions: Complete the following code to make predictions using
+%               your learned logistic regression parameters. 
+%               You should set p to a vector of 0's and 1's
+%
+
+for i=1:m,
+ if (sigmoid(theta'*X)>=0.5),  p(i)=1; end; end;
  
 
 
 
 
-    % ============================================================
-
-    % Save the cost J in every iteration    
-    J_history(iter) = computeCost(X, y, theta);
-
-end
-
-end
-
-
-
-
-
-function J = computeCost(X, y, theta)
-%COMPUTECOST Compute cost for linear regression
-%   J = COMPUTECOST(X, y, theta) computes the cost of using theta as the
-%   parameter for linear regression to fit the data points in X and y
-
-% Initialize some useful values
-m = length(y); % number of training examples
-
-% You need to return the following variables correctly 
-J = 0;
-
-% ====================== YOUR CODE HERE ======================
-% Instructions: Compute the cost of a particular choice of theta
-%               You should set J to the cost.
-
-for i=1:m,
- J+=(X(i,:)*theta-y(i))^2; 
- end;
-
-J/=2*m;
 
 % =========================================================================
 
-end
-
-
-function A = warmUpExercise()
-%WARMUPEXERCISE Example function in octave
-%   A = WARMUPEXERCISE() is an example function that returns the 5x5 identity matrix
-
-A = [];
-% ============= YOUR CODE HERE ==============
-% Instructions: Return the 5x5 identity matrix 
-%               In octave, we return values by defining which variables
-%               represent the return values (at the top of the file)
-%               and then set them accordingly. 
-
-
-
-eye(5);
-
-
-
-% ===========================================
-
 
 end
 
 
-function J = computeCostMulti(X, y, theta)
-%COMPUTECOSTMULTI Compute cost for linear regression with multiple variables
-%   J = COMPUTECOSTMULTI(X, y, theta) computes the cost of using theta as the
-%   parameter for linear regression to fit the data points in X and y
 
-% Initialize some useful values
-m = length(y); % number of training examples
+function g = sigmoid(z)
+%SIGMOID Compute sigmoid function
+%   g = SIGMOID(z) computes the sigmoid of z.
 
 % You need to return the following variables correctly 
-J = 0;
+g = zeros(size(z));
 
 % ====================== YOUR CODE HERE ======================
-% Instructions: Compute the cost of a particular choice of theta
-%               You should set J to the cost.
-for i=1:m,
- J+=(X(i,:)*theta-y(i))^2; 
- end;
-
-J/=2*m;
-
-% =========================================================================
-
-end
-
-
-function plotData(x, y)
-%PLOTDATA Plots the data points x and y into a new figure 
-%   PLOTDATA(x,y) plots the data points and gives the figure axes labels of
-%   population and profit.
-
-figure; % open a new figure window
-
-% ====================== YOUR CODE HERE ======================
-% Instructions: Plot the training data into a figure using the 
-%               "figure" and "plot" commands. Set the axes labels using
-%               the "xlabel" and "ylabel" commands. Assume the 
-%               population and revenue data have been passed in
-%               as the x and y arguments of this function.
-%
-% Hint: You can use the 'rx' option with plot to have the markers
-%       appear as red crosses. Furthermore, you can make the
-%       markers larger by using plot(..., 'rx', 'MarkerSize', 10);
-
-data = load('ex1data1.txt');
-X = data(:, 1); y = data(:, 2);
-m = length(y); 
-
-plot(X, y, 'rx', 'MarkerSize', 10); 
-ylabel('Profit in $10,000s'); 
-xlabel('Population of City in 10,000s'); 
+% Instructions: Compute the sigmoid of each value of z (z can be a matrix,
+%               vector or scalar).
+l=size(z);
+l1=l(1);
+l2=l(2);
+for i=1:l1, for j=1:l2, g(i,j)=1/(1+exp(-z(i,j))); end; end;
 
 
 
-% ============================================================
+
+% =============================================================
 
 end
 
 
 
-function [X_norm, mu, sigma] = featureNormalize(X)
-%FEATURENORMALIZE Normalizes the features in X 
-%   FEATURENORMALIZE(X) returns a normalized version of X where
-%   the mean value of each feature is 0 and the standard deviation
-%   is 1. This is often a good preprocessing step to do when
-%   working with learning algorithms.
 
-% You need to set these values correctly
-X_norm = X;
-mu = zeros(1, size(X, 2));
-sigma = zeros(1, size(X, 2));
-
-% ====================== YOUR CODE HERE ======================
-% Instructions: First, for each feature dimension, compute the mean
-%               of the feature and subtract it from the dataset,
-%               storing the mean value in mu. Next, compute the 
-%               standard deviation of each feature and divide
-%               each feature by it's standard deviation, storing
-%               the standard deviation in sigma. 
-%
-%               Note that X is a matrix where each column is a 
-%               feature and each row is an example. You need 
-%               to perform the normalization separately for 
-%               each feature. 
-%
-% Hint: You might find the 'mean' and 'std' functions useful.
-%      \
-for i=1:size(X,2),
-mu(i)=mean(X(:,i));
-sigma(i)=std(X,(:,i));
-X_norm(:,i)-=mu(i);
-end;
-
-
-
-
-
-
-
-
-
-% ============================================================
-
-end
