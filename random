@@ -1,307 +1,143 @@
 #include<stdio.h>
 #include<stdlib.h>
-int element,top=0;int a[100000],b[100000];
-void push(int element)
-{  
-        	a[top] = element;
-		top = top + 1;
-	
-		return;   }
-    
-    
-    
-int pop()
-{
+#define li long int
 
-		
-		top = top - 1;
-		return(a[top]);
-	
+struct priq
+{  long int val;
+   long int pri; };
+  li size=0;
+  
+  void minheapify(struct priq **pq1,li i)
+{
+	li left=2*i+1;
+	li right=2*i+2;
+	li smallest=i;
+		if ( (*pq1)[left].pri<(*pq1)[smallest].pri && right<size )
+		smallest=right;
+	if ((*pq1)[left].pri<(*pq1)[i].pri && left<size)
+		smallest=left;
+
+	if (smallest!=i)
+	{
+                li value;li prior;
+                value=((*pq1)[smallest].val);
+                prior=((*pq1)[smallest].pri);
+                ((*pq1)[smallest].val)=((*pq1)[i].val);
+                ((*pq1)[smallest].pri)=((*pq1)[i].pri);
+                ((*pq1)[i].val)=value;
+                ((*pq1)[i].pri)=prior; 
+		minheapify(pq1,smallest);
+	}
 }
 
-void inschar(char chr,int cnt)
+void decrease_priority(struct priq **pq1,li valuee,li key)
 {
-    if (b[cnt-3]==-2)
-     { b[cnt-3]=(int)(chr); return; }
-    else
-     inschar(chr,cnt-2); 
+
+   li i,val1,pri1;
+   for(i=0;i<size;i++)
+    if(((*pq1)[i].val)==valuee)
+       break;
+   if(((*pq1)[i].pri)<= key)
+    { printf("ERROR\n"); }
+   else
+    {
+       ((*pq1)[i].pri)=key;
+       while(i>0 && ((*pq1)[i/2].pri)>((*pq1)[i].pri))
+       {
+          val1=((*pq1)[i].val);
+          pri1=((*pq1)[i].pri);
+          ((*pq1)[i].val)=((*pq1)[i/2].val);
+          ((*pq1)[i].pri)=((*pq1)[i/2].pri);
+          ((*pq1)[i/2].val)=val1;
+          ((*pq1)[i/2].pri)=pri1; 
+          i=i/2;
+       } 
+    }   
 }
 
+
+void print(struct priq *pq1)
+{
+
+ li i=0;
+  
+ for(i=0;i<size;i++)
+  printf("%li %li -",(pq1[i].val),(pq1[i].pri));  
+}
+
+void get_min(struct priq* pq1)
+{
+  if(size==0)
+   printf("EMPTY\n");
+  else
+   printf("%li (%li)\n",(pq1[0].val),(pq1[0].pri));
+}
+void extract_min(struct priq** pq1)
+{
+   if(size==0)
+   printf("EMPTY\n");
+   else
+   {
+      printf("%li (%li)\n",((*pq1)[0].val),((*pq1)[0].pri));
+      (*pq1)[0].val=(*pq1)[size-1].val;
+      (*pq1)[0].pri=(*pq1)[size-1].pri;
+      size--;
+      minheapify(pq1,0);
+   }
+
+
+}
+void insert(struct priq** pq1,li v,li pr)
+{
+  size++;
+  li i;li val2;li pri2;
+  if(size==1)
+   *pq1=(struct priq *)malloc(size*sizeof(struct priq));
+  else 
+   *pq1=(struct priq *)realloc(*pq1,sizeof(struct priq)*size);
+      (*pq1)[size-1].val=v;
+      (*pq1)[size-1].pri=pr;
+  i=size-1;
+  while(i>0 && ((*pq1)[i/2].pri)>((*pq1)[i].pri))
+   {
+     val2=((*pq1)[i/2].val);
+     pri2=((*pq1)[i/2].pri);
+     ((*pq1)[i/2].val)=((*pq1)[i].val);
+     ((*pq1)[i/2].pri)=((*pq1)[i].pri);
+     ((*pq1)[i].val)=val2;
+     ((*pq1)[i].pri)=pri2;
+     i=i/2;
+   } 
+
+}  
+
+  
  int main(){
-     char ch,d[100],c[100];int i=0,num=0,dig,v1,v2,count=0;
-     for (i=0;i<100000;i++)
-     b[i]=-2;
+     char ch;li valu,prio;
+     struct priq *pq1;
      while(1)
-     {   
+     {
          scanf("%c",&ch);
-         if (ch=='\n')
-         {  v1=pop();
-            
-            break; }
-         else if (ch>='0'&& ch<='9')
-         {   dig=(int)(ch-'0');
-             
-             num=num*10+dig;
-         }
-         else if (ch==' ')
-         {  
-             if (num!=0)
-            {push(num); b[count]=num; count+=2;
-            num=0; } continue; }
-         else if (ch=='+'||ch=='-'||ch=='*'|| ch=='/'|| ch=='^')
-         {  if (ch=='+')
-            { v1=pop();
-              
-              v2=pop();
-              
-              push(v1+v2);
-              inschar(ch,count);
-                
-                
-                
-            }
-            if (ch=='-')
-            { v1=pop();
-              v2=pop();
-              push(v2-v1); inschar(ch,count); }
-              if (ch=='*')
-            { v1=pop();
-              v2=pop();
-              push(v1*v2); inschar(ch,count); }
-              if (ch=='/')
-            { v1=pop();
-              v2=pop();
-              push(v2/v1); inschar(ch,count); }
-              
-              
-         }
-         
-     }
-  for(i=0;i<100000;i++)
-  { if (b[i]==-2)
-     break;
-    else if (i%2==0)
-     printf("%d",b[i]);
-    else if (i%2!=0)
-     printf("%c",(char)(b[i])); } 
-      printf("\n");
-      printf("%d",v1);
-      
-  }
-     
- 
- 
-#include<stdio.h>
-#include<stdlib.h>
-int len;char ch;int elem;
- 
-int q[100000],len;
-int rear = - 1;
-int front = - 1;
-
-void enqueue(int element);
-void dequeue();
-void print_queue();
-
-
-
- 
-void main()
-{
-    int elem;char ch,tem;int e;
-    
-    while (1)
-    {
-        scanf("%d",&len);
-        scanf("%c", &ch);
-        switch (ch)
-        {
-        case 'e':
-            scanf("%c",&tem);
-            scanf("%d", &elem);
-            enqueue(elem);
-            break;
-        case 'd':
-            dequeue();
-            break;
-        
-      
-        case 's':
-            exit(0);
-        case 'p':
-            print_queue();
-            printf("\n");
-            break;
-        
-        
-        }
-    }
-}
-
-void enqueue(int element){
-    
-    if (rear == len - 1)
-    { printf("-2\n"); return; }
-    else
-    {
-        if (front == - 1)
-        front = 0;
-        rear = rear + 1;
-        q[rear] = element;
-        return ;
-    }
-}
-
-void dequeue()
-{
-    if (front == - 1 || front > rear)
-    {
-        printf("-1\n");
-        return ;
-    }
-    else
-    {
-        front = front + 1;
-    }
-}
-
-void print_queue()
-{
-    int i;
-    if(front==-1 || front>rear)
-               { printf("-1"); return; }
-            else
-            {
-                for(i=front; i<=rear; i++)
-                
-                    printf("%d ",q[i]);
-                    
-                
-}}
-
-
-#include <stdio.h>
-#include <stdlib.h>
- 
-struct node
-{int data;
-    struct node *ptr;
-}*front,*rear,*temp,*front1;
- 
-
-void enqueue(int element);
-void dequeue();
-void print_queue();
-
-
-int count,num;
- 
-void main()
-{
-    int elem;char ch,tem;int e;
- 
-    scanf("%d",&num);
-    
-    front=rear=NULL;
-    while (1)
-    {
-        
-        scanf("%c", &ch);
-        switch (ch)
-        {
-        case 'e':
-            scanf("%c",&tem);
-            scanf("%d", &elem);
-            enqueue(elem);
-            break;
-        case 'd':
-            dequeue();
-            break;
-        
-      
-        case 's':
-            exit(0);
-        case 'p':
-            print_queue();
-            printf("\n");
-            break;
-        
-        
-        }
-    }
-}
- 
-
- 
-
-
-void enqueue(int element)
-{   if (count>=num)
-     {printf("-2\n"); return; }
-    if (rear == NULL)
-    {
-        rear = (struct node *)malloc(1*sizeof(struct node));
-        rear->ptr = NULL;
-        rear->data = element;
-        front = rear;
-    }
-    else
-    {
-        temp=(struct node *)malloc(1*sizeof(struct node));
-        rear->ptr = temp;
-        temp->data = element;
-        temp->ptr = NULL;
- 
-        rear = temp;
-    }
-    count++;
-}
- 
-
-void print_queue()
-{
-    front1 = front;
- 
-    if ((front1 == NULL) && (rear == NULL))
-    {
-       printf("-1\n");
-        return;
-    }
-    while (front1 != rear)
-    {
-        printf("%d ", front1->data);
-        front1 = front1->ptr;
-    }
-    if (front1 == rear)
-        printf("%d", front1->data);
-}
- 
-
-void dequeue()
-{
-    front1 = front;
- 
-    if (front1 == NULL)
-    {
-               printf("-1\n");
-
-        return;
-    }
-    else
-        if (front1->ptr != NULL)
-        {
-            front1 = front1->ptr;
+         if (ch=='s')
+         break;
+         switch (ch)
+         { 
+           case 'g':get_min(pq1); 
+              break;
+           case 'e':extract_min(&pq1);
+              break;
+           case 'd':scanf("%li %li",&valu,&prio);
+              decrease_priority(&pq1,valu,prio);
+              break;
            
-            free(front);
-            front = front1;
-        }
-        else
-        {
-           
-            free(front);
-            front = NULL;
-            rear = NULL;
-        }
-        count--;
+           case 'a':scanf("%li %li",&valu,&prio);
+              insert(&pq1,valu,prio);
+              break;
+           case 's': 
+              break;
+   }
 }
- 
+
+
+}
+        
