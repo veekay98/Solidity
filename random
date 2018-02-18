@@ -90,3 +90,218 @@ void inschar(char chr,int cnt)
   }
      
  
+ 
+#include<stdio.h>
+#include<stdlib.h>
+int len;char ch;int elem;
+ 
+int q[100000],len;
+int rear = - 1;
+int front = - 1;
+
+void enqueue(int element);
+void dequeue();
+void print_queue();
+
+
+
+ 
+void main()
+{
+    int elem;char ch,tem;int e;
+    
+    while (1)
+    {
+        scanf("%d",&len);
+        scanf("%c", &ch);
+        switch (ch)
+        {
+        case 'e':
+            scanf("%c",&tem);
+            scanf("%d", &elem);
+            enqueue(elem);
+            break;
+        case 'd':
+            dequeue();
+            break;
+        
+      
+        case 's':
+            exit(0);
+        case 'p':
+            print_queue();
+            printf("\n");
+            break;
+        
+        
+        }
+    }
+}
+
+void enqueue(int element){
+    
+    if (rear == len - 1)
+    { printf("-2\n"); return; }
+    else
+    {
+        if (front == - 1)
+        front = 0;
+        rear = rear + 1;
+        q[rear] = element;
+        return ;
+    }
+}
+
+void dequeue()
+{
+    if (front == - 1 || front > rear)
+    {
+        printf("-1\n");
+        return ;
+    }
+    else
+    {
+        front = front + 1;
+    }
+}
+
+void print_queue()
+{
+    int i;
+    if(front==-1 || front>rear)
+               { printf("-1"); return; }
+            else
+            {
+                for(i=front; i<=rear; i++)
+                
+                    printf("%d ",q[i]);
+                    
+                
+}}
+
+
+#include <stdio.h>
+#include <stdlib.h>
+ 
+struct node
+{int data;
+    struct node *ptr;
+}*front,*rear,*temp,*front1;
+ 
+
+void enqueue(int element);
+void dequeue();
+void print_queue();
+
+
+int count,num;
+ 
+void main()
+{
+    int elem;char ch,tem;int e;
+ 
+    scanf("%d",&num);
+    
+    front=rear=NULL;
+    while (1)
+    {
+        
+        scanf("%c", &ch);
+        switch (ch)
+        {
+        case 'e':
+            scanf("%c",&tem);
+            scanf("%d", &elem);
+            enqueue(elem);
+            break;
+        case 'd':
+            dequeue();
+            break;
+        
+      
+        case 's':
+            exit(0);
+        case 'p':
+            print_queue();
+            printf("\n");
+            break;
+        
+        
+        }
+    }
+}
+ 
+
+ 
+
+
+void enqueue(int element)
+{   if (count>=num)
+     {printf("-2\n"); return; }
+    if (rear == NULL)
+    {
+        rear = (struct node *)malloc(1*sizeof(struct node));
+        rear->ptr = NULL;
+        rear->data = element;
+        front = rear;
+    }
+    else
+    {
+        temp=(struct node *)malloc(1*sizeof(struct node));
+        rear->ptr = temp;
+        temp->data = element;
+        temp->ptr = NULL;
+ 
+        rear = temp;
+    }
+    count++;
+}
+ 
+
+void print_queue()
+{
+    front1 = front;
+ 
+    if ((front1 == NULL) && (rear == NULL))
+    {
+       printf("-1\n");
+        return;
+    }
+    while (front1 != rear)
+    {
+        printf("%d ", front1->data);
+        front1 = front1->ptr;
+    }
+    if (front1 == rear)
+        printf("%d", front1->data);
+}
+ 
+
+void dequeue()
+{
+    front1 = front;
+ 
+    if (front1 == NULL)
+    {
+               printf("-1\n");
+
+        return;
+    }
+    else
+        if (front1->ptr != NULL)
+        {
+            front1 = front1->ptr;
+           
+            free(front);
+            front = front1;
+        }
+        else
+        {
+           
+            free(front);
+            front = NULL;
+            rear = NULL;
+        }
+        count--;
+}
+ 
