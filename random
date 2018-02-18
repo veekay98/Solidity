@@ -1,127 +1,92 @@
-function [J, grad] = costFunction(theta, X, y)
-%COSTFUNCTION Compute cost and gradient for logistic regression
-%   J = COSTFUNCTION(theta, X, y) computes the cost of using theta as the
-%   parameter for logistic regression and the gradient of the cost
-%   w.r.t. to the parameters.
+#include<stdio.h>
+#include<stdlib.h>
+int element,top=0;int a[100000],b[100000];
+void push(int element)
+{  
+        	a[top] = element;
+		top = top + 1;
+	
+		return;   }
+    
+    
+    
+int pop()
+{
 
-% Initialize some useful values
-m = length(y); % number of training examples
+		
+		top = top - 1;
+		return(a[top]);
+	
+}
 
-% You need to return the following variables correctly 
-J = 0;
-grad = zeros(size(theta));
+void inschar(char chr,int cnt)
+{
+    if (b[cnt-3]==-2)
+     { b[cnt-3]=(int)(chr); return; }
+    else
+     inschar(chr,cnt-2); 
+}
 
-% ====================== YOUR CODE HERE ======================
-% Instructions: Compute the cost of a particular choice of theta.
-%               You should set J to the cost.
-%               Compute the partial derivatives and set grad to the partial
-%               derivatives of the cost w.r.t. each parameter in theta
-%
-% Note: grad should have the same dimensions as theta
-%
-for 1=1:m, J+= -y(i)*log10([ones(m,1) X] *theta)-(1-y(i))*(1-log10(1-([ones(m,1) X] *theta))); end;
-end;
-J/=m;
-for j=1:length(theta), for k=1:m, grad(j)+=(([ones(m,1) X] *theta)-y(k))*X(k,j); end; end;
-grad/=m;
-
-
-
-
-
-
-% =============================================================
-
-end
-
-
-
-function plotData(X, y)
-%PLOTDATA Plots the data points X and y into a new figure 
-%   PLOTDATA(x,y) plots the data points with + for the positive examples
-%   and o for the negative examples. X is assumed to be a Mx2 matrix.
-
-% Create New Figure
-figure; hold on;
-
-% ====================== YOUR CODE HERE ======================
-% Instructions: Plot the positive and negative examples on a
-%               2D plot, using the option 'k+' for the positive
-%               examples and 'ko' for the negative examples.
-%
-
-x1=X(:,1);x2=X(:,2);
-XX=[];YY=[];Y=[];x=[];
-
-for i=1:length(y), if(y(i)==1), x=[x x1(i)]; Y=[Y x2(i)]; end; end;
-for i=1:length(y), if(y(i)==0), XX=[XX x1(i)]; YY=[YY x2(i)]; end; end;
+ int main(){
+     char ch,d[100],c[100];int i=0,num=0,dig,v1,v2,count=0;
+     for (i=0;i<100000;i++)
+     b[i]=-2;
+     while(1)
+     {   
+         scanf("%c",&ch);
+         if (ch=='\n')
+         {  v1=pop();
+            
+            break; }
+         else if (ch>='0'&& ch<='9')
+         {   dig=(int)(ch-'0');
+             
+             num=num*10+dig;
+         }
+         else if (ch==' ')
+         {  
+             if (num!=0)
+            {push(num); b[count]=num; count+=2;
+            num=0; } continue; }
+         else if (ch=='+'||ch=='-'||ch=='*'|| ch=='/'|| ch=='^')
+         {  if (ch=='+')
+            { v1=pop();
+              
+              v2=pop();
+              
+              push(v1+v2);
+              inschar(ch,count);
+                
+                
+                
+            }
+            if (ch=='-')
+            { v1=pop();
+              v2=pop();
+              push(v2-v1); inschar(ch,count); }
+              if (ch=='*')
+            { v1=pop();
+              v2=pop();
+              push(v1*v2); inschar(ch,count); }
+              if (ch=='/')
+            { v1=pop();
+              v2=pop();
+              push(v2/v1); inschar(ch,count); }
+              
+              
+         }
+         
+     }
+  for(i=0;i<100000;i++)
+  { if (b[i]==-2)
+     break;
+    else if (i%2==0)
+     printf("%d",b[i]);
+    else if (i%2!=0)
+     printf("%c",(char)(b[i])); } 
+      printf("\n");
+      printf("%d",v1);
+      
+  }
+     
  
-plot(x,Y,'k+','LineWidth',2,'MarkerSize',7);
-plot(XX,YY,'ko','MarkerFaceColor','y','MarkerSize',7);
-% =========================================================================
-
-
-
-hold off;
-
-end
-
-
-
-function p = predict(theta, X)
-%PREDICT Predict whether the label is 0 or 1 using learned logistic 
-%regression parameters theta
-%   p = PREDICT(theta, X) computes the predictions for X using a 
-%   threshold at 0.5 (i.e., if sigmoid(theta'*x) >= 0.5, predict 1)
-
-m = size(X, 1); % Number of training examples
-
-% You need to return the following variables correctly
-p = zeros(m, 1);
-
-% ====================== YOUR CODE HERE ======================
-% Instructions: Complete the following code to make predictions using
-%               your learned logistic regression parameters. 
-%               You should set p to a vector of 0's and 1's
-%
-
-for i=1:m,
- if (sigmoid(theta'*X)>=0.5),  p(i)=1; end; end;
- 
-
-
-
-
-
-% =========================================================================
-
-
-end
-
-
-
-function g = sigmoid(z)
-%SIGMOID Compute sigmoid function
-%   g = SIGMOID(z) computes the sigmoid of z.
-
-% You need to return the following variables correctly 
-g = zeros(size(z));
-
-% ====================== YOUR CODE HERE ======================
-% Instructions: Compute the sigmoid of each value of z (z can be a matrix,
-%               vector or scalar).
-l=size(z);
-l1=l(1);
-l2=l(2);
-for i=1:l1, for j=1:l2, g(i,j)=1/(1+exp(-z(i,j))); end; end;
-
-
-
-
-% =============================================================
-
-end
-
-
-
-
